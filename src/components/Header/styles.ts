@@ -8,7 +8,7 @@ export const Content = styled.div`
   max-width: 1120px;
 
   margin: 0 auto;
-  padding: 2rem 1rem 12rem;
+  padding: 2rem 1rem 9rem;
 
   display: flex;
   align-items: center;
@@ -31,5 +31,9 @@ export const Content = styled.div`
     &:hover {
       filter: brightness(.9);
     }
+  }
+
+  @media screen and (max-width: 720px) {
+    padding-bottom: 2rem;
   }
 `
