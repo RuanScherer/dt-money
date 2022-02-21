@@ -77,6 +77,8 @@ export const GlobalStyle = createGlobalStyle`
     left: 0;
     right: 0;
 
+    padding: 1rem;
+
     display: flex;
     align-items: center;
     justify-content: center;

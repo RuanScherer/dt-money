@@ -1,4 +1,5 @@
 import { useTransactions } from "../../hooks/useTransactions";
+import { formatCurrencyUSD } from "../../utils/formatters";
 import { Container } from "./styles";
 
 export function TransactionTable() {
@@ -22,15 +23,7 @@ export function TransactionTable() {
               <td>{transaction.title}</td>
               <td className={transaction.type}>
                 { 
-                  new Intl
-                    .NumberFormat(
-                      'pt-BR', 
-                      {
-                        style: 'currency',
-                        currency: 'BRL'
-                      }
-                    )
-                    .format(transaction.amount)
+                  formatCurrencyUSD(transaction.amount)
                 }
               </td>
               <td>{transaction.category}</td>
