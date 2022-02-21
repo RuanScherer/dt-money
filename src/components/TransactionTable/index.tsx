@@ -1,12 +1,25 @@
 import { useTransactions } from "../../hooks/useTransactions";
 import { formatCurrencyUSD } from "../../utils/formatters";
+import { TransactionsSearch } from "../TransactionsSearch";
 import { Container } from "./styles";
 
-export function TransactionTable() {
-  const { transactions } = useTransactions()
+interface TransactionsTableProps {
+  allowSearch: boolean
+}
+
+export function TransactionTable(props: TransactionsTableProps) {
+  const { filteredTransactions, filterTransactions } = useTransactions()
+
+  function handleSearchTransactions(value: string) {
+    filterTransactions(value)
+  }
 
   return (
     <Container>
+      { props.allowSearch && 
+        <TransactionsSearch onSearch={handleSearchTransactions} />
+      }
+
       <table>
         <thead>
           <tr>
@@ -18,7 +31,7 @@ export function TransactionTable() {
         </thead>
 
         <tbody>
-          {transactions.map(transaction => (
+          {filteredTransactions.map(transaction => (
             <tr key={transaction.id}>
               <td>{transaction.title}</td>
               <td className={transaction.type}>

@@ -3,7 +3,9 @@ import { api } from '../services/api';
 
 interface TransactionsContextData {
   transactions: Transaction[],
+  filteredTransactions: Transaction[],
   createTransaction: (transaction: TransactionInput) => Promise<void>
+  filterTransactions: (title: string) => void
 }
 
 interface Transaction {
@@ -26,21 +28,42 @@ const TransactionsContext = createContext<TransactionsContextData>(
 )
 
 export function TransactionsProvider({ children }: TransactionsProviderProps) {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([])
+  const [filteredTransactions, setFilteredTransactions] = useState<Transaction[]>([])
   
   useEffect(() => {
     api.get('/transactions')
-      .then(response => setTransactions(response.data.transactions))
+      .then(response => {
+        setTransactions(response.data.transactions)
+        setFilteredTransactions(response.data.transactions)
+      })
   }, [])
 
   async function createTransaction(transactionInput: TransactionInput) {
     const response = await api.post('/transactions', transactionInput)
     const { transaction } = response.data
     setTransactions([...transactions, transaction])
+    setFilteredTransactions([...filteredTransactions, transaction])
+  }
+
+  function filterTransactions(title: string) {
+    if (!title) setFilteredTransactions(transactions)
+    
+    const filtered = transactions.filter(transaction => 
+      transaction.title.toUpperCase().includes(title.toUpperCase())
+    )
+    setFilteredTransactions(filtered)
   }
 
   return (
-    <TransactionsContext.Provider value={{ transactions, createTransaction }}>
+    <TransactionsContext.Provider
+      value={{ 
+        transactions,
+        filteredTransactions,
+        createTransaction,
+        filterTransactions
+      }}
+    >
       {children}
     </TransactionsContext.Provider>
   )

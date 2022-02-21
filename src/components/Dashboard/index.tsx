@@ -6,7 +6,7 @@ export function Dashboard() {
   return (
     <Container>
       <Summary />
-      <TransactionTable />
+      <TransactionTable allowSearch/>
     </Container>
   )
 }
